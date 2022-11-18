@@ -31,6 +31,7 @@ toxicL = pygame.image.load(path + "toxic1.png")
 toxicM = pygame.image.load(path + "toxic2.png")
 toxicR = pygame.image.load(path + "toxic3.png")
 
+drown = pygame.image.load(path + "drown.jpg")
 box = pygame.image.load(path + "box.png")
 dead = pygame.image.load(path + "dead.jpg")
 character1 = pygame.image.load(path + "character1.jpg")

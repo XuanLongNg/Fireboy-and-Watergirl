@@ -104,7 +104,6 @@ class Player1:
 
                 # check for collision register on the left
                 if len(tile) == 3 and tile[2] == 3:
-                    print(tile[1].bottom)
                     if tile[1].colliderect(self.rect.x, self.rect.y, self.width, self.height) and tile[
                         1].bottom > 290 and self.rect.x > 880 and self.rect.top == 290:
                         self.image = self.dead_image
@@ -144,11 +143,24 @@ class Player1:
                         dy = tile[1].top - self.rect.bottom
                         self.vel_y = 0
 
-            # check for collision with diamond
+            # # check for collision with Lava blue
             if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group, False) or pygame.sprite.spritecollide(
-                    self, LavaR_group, False) or pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group,
-                                                                                                                                       False) or pygame.sprite.spritecollide(
-                self, ToxicR_group, False):
+                    self, LavaR_group, False):
+                if self.rect.y>513:
+                    self.rect.y=513
+                if self.rect.y<=514 and self.rect.x==520:
+                    self.rect.y-=10
+                    self.rect.x-=5
+                if self.rect.y<=514 and self.rect.x==560:
+                    self.rect.y-=10
+                    self.rect.x+=5
+                self.image=pygame.transform.scale(img.drown, (tile_size, 30))
+                print(self.rect.x,self.rect.y)
+                # game_over=-1
+
+            # check for collision with Toxic
+            if pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group, False) or pygame.sprite.spritecollide(
+                    self, ToxicR_group, False):
                 game_over = -1
                 print(game_over)
 
@@ -256,6 +268,10 @@ class Player2:
                     elif self.vel_y >= 0:
                         dy = tile[1].top - self.rect.bottom
                         self.vel_y = 0
+
+            # check for collision with Lava blue
+            # if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group,False) or pygame.sprite.spritecollide(self, LavaR_group, False):
+            #
 
             # check for collision with diamond
             if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group, False) or pygame.sprite.spritecollide(
@@ -384,7 +400,7 @@ class World:
 class Diamond(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(img.diamond1, (tile_size + 5, tile_size + 5))
+        self.image = pygame.transform.scale(img.diamond1, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
