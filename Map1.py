@@ -143,23 +143,23 @@ class Player1:
                         dy = tile[1].top - self.rect.bottom
                         self.vel_y = 0
 
-            # # check for collision with Lava blue
-            if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group, False) or pygame.sprite.spritecollide(
-                    self, LavaR_group, False):
-                if self.rect.y>513:
-                    self.rect.y=513
-                if self.rect.y<=514 and self.rect.x==520:
-                    self.rect.y-=10
-                    self.rect.x-=5
-                if self.rect.y<=514 and self.rect.x==560:
-                    self.rect.y-=10
-                    self.rect.x+=5
-                self.image=pygame.transform.scale(img.drown, (tile_size, 30))
-                print(self.rect.x,self.rect.y)
+            # check for collision with Lava blue
+            if pygame.sprite.spritecollide(self, LavaBlueL_group, False) or pygame.sprite.spritecollide(self, LavaBlueM_group,
+                                                                                                        False) or pygame.sprite.spritecollide(
+                    self, LavaBlueR_group, False):
+                if self.rect.y > 513:
+                    self.rect.y = 513
+                if self.rect.y <= 514 and self.rect.x == 520:
+                    self.rect.y -= 10
+                    self.rect.x -= 5
+                if self.rect.y <= 514 and self.rect.x == 560:
+                    self.rect.y -= 10
+                    self.rect.x += 5
+                self.image = pygame.transform.scale(img.drownBlue, (tile_size, 30))
                 # game_over=-1
 
-            # check for collision with Toxic
-            if pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group, False) or pygame.sprite.spritecollide(
+            # check for collision with Toxic or lava red
+            if pygame.sprite.spritecollide(self, LavaRedL_group, False) or pygame.sprite.spritecollide(self, LavaRedM_group,False) or pygame.sprite.spritecollide(self, LavaRedR_group, False) or pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group, False) or pygame.sprite.spritecollide(
                     self, ToxicR_group, False):
                 game_over = -1
                 print(game_over)
@@ -187,7 +187,7 @@ class Player2:
         self.index = 0
         self.counter = 0
         for num in range(1, 5):
-            img_right = pygame.transform.scale(pygame.image.load(img.path + f'character#{1}.png'), (tile_size, 30))
+            img_right = pygame.transform.scale(pygame.image.load(img.path + f'character#{num}.jpg'), (tile_size, 30))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
@@ -251,6 +251,40 @@ class Player2:
             # check for collision
             for tile in world.tile_list:
 
+                # check for collision register on the left
+                if len(tile) == 3 and tile[2] == 2:
+                    if tile[1].colliderect(self.rect.x, self.rect.y, self.width, self.height) and tile[
+                        1].bottom > 350 and self.rect.x < 120 and self.rect.top == 350:
+                        self.image = self.dead_image
+                        game_over = -1
+
+                # check for collision register on the left
+                if len(tile) == 3 and tile[2] == 3:
+                    if tile[1].colliderect(self.rect.x, self.rect.y, self.width, self.height) and tile[
+                        1].bottom > 290 and self.rect.x > 880 and self.rect.top == 290:
+                        self.image = self.dead_image
+                        game_over = -1
+
+                if len(tile) == 3 and tile[2] == 1:
+                    if tile[1].colliderect(self.rect.x, self.rect.y, self.width, self.height):
+                        if tile[1].x >= 470 and tile[1].x <= 490:
+                            tile[1].y += 5
+                            if tile[1].y > 190:
+                                tile[1].y = 190
+                                if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                                    dx = 0
+                                if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                                    # check if below the ground i.e. jumping
+                                    if self.vel_y < 0:
+                                        dy = tile[1].bottom - self.rect.top
+                                        self.vel_y = 0
+                                    # check if above the ground i.e. jumping
+                                    elif self.vel_y >= 0:
+                                        dy = tile[1].top - self.rect.bottom
+                                        self.vel_y = 0
+                        else:
+                            tile[1].x -= 5
+
                 if len(tile) == 3 and tile[2] == 1:
                     if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                         dx = -5
@@ -269,15 +303,21 @@ class Player2:
                         dy = tile[1].top - self.rect.bottom
                         self.vel_y = 0
 
-            # check for collision with Lava blue
-            # if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group,False) or pygame.sprite.spritecollide(self, LavaR_group, False):
-            #
+            # check for collision with Lava red
+            if pygame.sprite.spritecollide(self, LavaRedL_group, False) or pygame.sprite.spritecollide(self, LavaRedM_group,False) or pygame.sprite.spritecollide(self, LavaRedR_group, False):
+                        if self.rect.y > 513:
+                            self.rect.y = 513
+                            if self.rect.y <= 514 and self.rect.x == 700:
+                                self.rect.y -= 10
+                                self.rect.x -= 5
+                            if self.rect.y <= 514 and self.rect.x == 740:
+                                self.rect.y -= 10
+                                self.rect.x += 5
+                            self.image = pygame.transform.scale(img.drownRed, (tile_size, 30))
+                            # game_over=-1
 
             # check for collision with diamond
-            if pygame.sprite.spritecollide(self, LavaL_group, False) or pygame.sprite.spritecollide(self, LavaM_group, False) or pygame.sprite.spritecollide(
-                    self, LavaR_group, False) or pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group,
-                                                                                                                                       False) or pygame.sprite.spritecollide(
-                self, ToxicR_group, False):
+            if pygame.sprite.spritecollide(self, LavaBlueL_group, False) or pygame.sprite.spritecollide(self, LavaBlueM_group,False) or pygame.sprite.spritecollide(self, LavaBlueR_group, False) or pygame.sprite.spritecollide(self, ToxicL_group, False) or pygame.sprite.spritecollide(self, ToxicM_group,False) or pygame.sprite.spritecollide(self, ToxicR_group, False):
                 game_over = -1
                 print(game_over)
 
@@ -352,8 +392,11 @@ class World:
                     regi = ToxicR(col_count * tile_size, row_count * tile_size)
                     ToxicR_group.add(regi)
                 if tile == 5:
-                    diamond = Diamond(col_count * tile_size, row_count * tile_size)
-                    diamond_group.add(diamond)
+                    diamond = DiamondBlue(col_count * tile_size, row_count * tile_size)
+                    diamondBlue_group.add(diamond)
+                if tile == 5.1:
+                    diamond = DiamondRed(col_count * tile_size, row_count * tile_size)
+                    diamondRed_group.add(diamond)
                 if tile == 6.1:
                     regi = L(col_count * tile_size, row_count * tile_size, self.tile_list)
                     L_group.add(regi)
@@ -379,14 +422,23 @@ class World:
                     regi = Press(col_count * tile_size, row_count * tile_size)
                     press2_group.add(regi)
                 if tile == 10.1:
-                    regi = LavaL(col_count * tile_size, row_count * tile_size, self.tile_list)
-                    LavaL_group.add(regi)
+                    regi = LavaBlueL(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaBlueL_group.add(regi)
                 if tile == 10.2:
-                    regi = LavaM(col_count * tile_size, row_count * tile_size, self.tile_list)
-                    LavaM_group.add(regi)
+                    regi = LavaBlueM(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaBlueM_group.add(regi)
                 if tile == 10.3:
-                    regi = LavaR(col_count * tile_size, row_count * tile_size, self.tile_list)
-                    LavaR_group.add(regi)
+                    regi = LavaBlueR(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaBlueR_group.add(regi)
+                if tile == 11.1:
+                    regi = LavaRedL(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaRedL_group.add(regi)
+                if tile == 11.2:
+                    regi = LavaRedM(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaRedM_group.add(regi)
+                if tile == 11.3:
+                    regi = LavaRedR(col_count * tile_size, row_count * tile_size, self.tile_list)
+                    LavaRedR_group.add(regi)
 
                 col_count += 1
             row_count += 1
@@ -394,13 +446,24 @@ class World:
     def draw(self):
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
-            # pygame.draw.rect(screen, (0, 0, 0), tile[1], 1)
+            pygame.draw.rect(screen, (0, 0, 0), tile[1], 1)
 
 
-class Diamond(pygame.sprite.Sprite):
+class DiamondBlue(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(img.diamond1, (tile_size, tile_size))
+        self.image = pygame.transform.scale(img.diamondBlue, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+
+
+class DiamondRed(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(img.diamondRed, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -419,28 +482,55 @@ class Box(pygame.sprite.Sprite):
         lis.append(tile)
 
 
-class LavaL(pygame.sprite.Sprite):
+class LavaBlueL(pygame.sprite.Sprite):
     def __init__(self, x, y, lis):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(img.lavaL, (tile_size, tile_size))
+        self.image = pygame.transform.scale(img.lavaBlueL, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 
-class LavaM(pygame.sprite.Sprite):
+class LavaBlueM(pygame.sprite.Sprite):
     def __init__(self, x, y, lis):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(img.lavaM, (tile_size, tile_size))
+        self.image = pygame.transform.scale(img.lavaBlueM, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 
-class LavaR(pygame.sprite.Sprite):
+class LavaBlueR(pygame.sprite.Sprite):
     def __init__(self, x, y, lis):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(img.lavaR, (tile_size, tile_size))
+        self.image = pygame.transform.scale(img.lavaBlueR, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class LavaRedL(pygame.sprite.Sprite):
+    def __init__(self, x, y, lis):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(img.lavaRedL, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class LavaRedM(pygame.sprite.Sprite):
+    def __init__(self, x, y, lis):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(img.lavaRedM, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class LavaRedR(pygame.sprite.Sprite):
+    def __init__(self, x, y, lis):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(img.lavaRedR, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -609,11 +699,14 @@ class R2(pygame.sprite.Sprite):
             self.move_counter = 0
 
 
+# GROUP
 player1 = Player1(40, height - 80)
 player2 = Player2(40, height - 140)
 blob_group = pygame.sprite.Group()
-diamond_group = pygame.sprite.Group()
 box_group = pygame.sprite.Group()
+
+diamondBlue_group = pygame.sprite.Group()
+diamondRed_group = pygame.sprite.Group()
 
 press1_group = pygame.sprite.Group()
 press2_group = pygame.sprite.Group()
@@ -625,9 +718,13 @@ L2_group = pygame.sprite.Group()
 M2_group = pygame.sprite.Group()
 R2_group = pygame.sprite.Group()
 
-LavaL_group = pygame.sprite.Group()
-LavaM_group = pygame.sprite.Group()
-LavaR_group = pygame.sprite.Group()
+LavaBlueL_group = pygame.sprite.Group()
+LavaBlueM_group = pygame.sprite.Group()
+LavaBlueR_group = pygame.sprite.Group()
+
+LavaRedL_group = pygame.sprite.Group()
+LavaRedM_group = pygame.sprite.Group()
+LavaRedR_group = pygame.sprite.Group()
 
 ToxicL_group = pygame.sprite.Group()
 ToxicM_group = pygame.sprite.Group()
@@ -641,7 +738,9 @@ while run:
 
     world.draw()
 
-    if pygame.sprite.spritecollide(player1, diamond_group, True):
+    if pygame.sprite.spritecollide(player1, diamondBlue_group, True):
+        score += 1
+    if pygame.sprite.spritecollide(player2, diamondRed_group, True):
         score += 1
     if pygame.sprite.spritecollide(player1, press1_group, False) or pygame.sprite.spritecollide(player2, press1_group, False):
         isPress1 = False
@@ -653,12 +752,18 @@ while run:
         # pygame.sprite.spritecollide(player1, press1_group, False)
 
     blob_group.draw(screen)
-    diamond_group.draw(screen)
     box_group.draw(screen)
 
-    LavaL_group.draw(screen)
-    LavaM_group.draw(screen)
-    LavaR_group.draw(screen)
+    diamondBlue_group.draw(screen)
+    diamondRed_group.draw(screen)
+
+    LavaBlueL_group.draw(screen)
+    LavaBlueM_group.draw(screen)
+    LavaBlueR_group.draw(screen)
+
+    LavaRedL_group.draw(screen)
+    LavaRedM_group.draw(screen)
+    LavaRedR_group.draw(screen)
 
     ToxicL_group.draw(screen)
     ToxicM_group.draw(screen)
