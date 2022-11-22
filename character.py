@@ -118,6 +118,7 @@ class Character():
         #     self.jumped = False
         #     y = 0
         # add gravity
+
         self.vel_y += 1
         if self.vel_y == 0:
             y = -1
