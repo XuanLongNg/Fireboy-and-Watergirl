@@ -1,9 +1,19 @@
 import pygame
 from math import *
+from setting import *
 
 
 class Character():
-    def __init__(self, character):
+    def __init__(self, character, x, y):
+        # logic game
+        self.rect_body = pygame.Rect(x, y-block, block, block*2)
+        # self.rect_body = [0, 0]
+        # self.rect_body.x = x
+        # self.rect_body.y = y
+        self.vel_y = 0
+        self.jumped = False
+
+        # animation
         cs = 136
         self.characters = [
             # head fall
@@ -72,31 +82,146 @@ class Character():
             character.subsurface(cs * 14 - 26, cs * 3.55, cs, cs),  # 59
 
             # body stay
-            character.subsurface(cs*6+90, cs*2, cs, cs)  # 60
+            character.subsurface(cs*6+90, cs*2, cs, cs),  # 60
+
+            # head jump
+            character.subsurface(0, cs * 9-27, cs, cs),  # 61
+            character.subsurface(cs, cs * 9-27, cs, cs),
+            character.subsurface(cs * 2, cs * 9-27, cs, cs),
+            character.subsurface(cs * 9 + 40, cs * 9+45, cs, cs),
+            character.subsurface(cs * 10 + 40, cs * 9+45, cs, cs),
+            character.subsurface(cs * 11 + 40, cs * 9+45, cs, cs),  # 66
+            character.subsurface(cs * 12 + 40, cs * 9+45, cs, cs),
+            character.subsurface(cs * 13 + 40, cs * 9+45, cs, cs),
+            character.subsurface(cs * 7 + 40, cs * 9-29, cs, cs),
+            character.subsurface(cs * 8 + 40, cs * 9-29, cs, cs)  # 70
         ]
-        self.character_index = 0
+
+    # logic game
+    def update(self, x, y, map):
+        dx = 0
+        dy = 0
+        x = 0
+        # get keypresses
+        key = pygame.key.get_pressed()
+        if key[pygame.K_w] and self.jumped == False:
+            self.vel_y = -block*0.6
+            self.jumped = True
+            y = 1
+        if key[pygame.K_a]:
+            dx -= block/2
+            x = -1
+        if key[pygame.K_d]:
+            dx += block/2
+            x = 1
+        # if bottom > 0:
+        #     self.jumped = False
+        #     y = 0
+        # add gravity
+        self.vel_y += 1
+        if self.vel_y == 0:
+            y = -1
+        if self.vel_y >= block/2:
+            self.vel_y = block/2
+
+        dy += self.vel_y
+
+        # check for collision
+        # for i in world:
+        # if i[]
+
+        # update player coordinates
+        self.rect_body.x += dx
+        self.rect_body.y += dy
+
+        if self.rect_body.y > height-block:
+            self.rect_body.y = height-block
+            dy = 0
+        return x, y
 
     # update character's animation
-    def update_animation(self, x, y, screen, lct_x, lcx_y, k):
-        if x == 0 and y == 0:
+    def update_animation(self, x, y, screen, k, h):
+        pygame.draw.rect(
+            screen, white, (self.rect_body.x, self.rect_body.y-block, block, block*2), 2)
+
+        mergex, mergey, degree, move, lctFlip = 0, 0, 0, 0, 0
+        flip = False
+        if x == 0 and y == 0:  # stay
             if k > 58 or k <= 29:
                 k = 29
+            h = 59
+            mergex = - block * 0.8
+            mergey = - block * 1.5
         else:
-            if abs(x) > 0 and y == 0:
-                if k:
-                    pass
-            elif x == 0 and abs(y) > 0:
+            if abs(x) > 0 and y == 0:  # move
+                if k > 20 or k < 11:
+                    k = 10
+                if h < 22 or h > 28:
+                    h = 21
+                mergex = - block * 1.2
+                mergey = - block * 1.1
+                move = - 0.2
+                if x < 0:
+                    flip = True   # flip
+                    lctFlip = - block
+                    mergex = block * 0.2
+            elif x == 0 and abs(y) > 0:  # jump and fall
                 if y < 0:
                     if k > 9:
                         k = -1
+                    mergex = - block * 0.8
+                    mergey = - block * 2
                 if y > 0:
-                    if k:
-                        pass
+                    if k <= 60 or k > 69:
+                        k = 60
+                    mergex = - block * 0.8
+                    mergey = - block * 1.5
+                h = 59
+            else:  # jump and move
+                if k > 20 or k < 11:
+                    k = 10
+                if h < 22 or h > 28:
+                    h = 21
+                # degree = 45
+                # mergex = - block * 1
+                # mergey = - block * 1
+                mergex = - block * 1.2
+                mergey = - block * 1.1
+                if x < 0:
+                    flip = True   # flip
+                    lctFlip = - block
+                    mergex = block * 0.2
+                # if x > 0 and y < 0:
+                #     degree = -45
+                #     mergex = - block * 1.2
+                #     mergey = - block * 1.3
+                # if x < 0 and y < 0:
+                #     degree = -45
+                #     mergex = 0
+                #     mergey = - block * 1.2
         k += 1
-        screen.blit(self.characters[60], (lct_x+13, lcx_y+45))
-        screen.blit(self.characters[k], (lct_x, lcx_y))
-        self.character_index = k
-        return self.character_index
+        h += 1
+        degree = 0
+        img = pygame.transform.scale(pygame.transform.rotate(
+            self.characters[k], degree), (block*3, block*3))
+        imgBody = pygame.transform.scale(
+            self.characters[h], (block*3, block*3))
+        if flip:
+            img = pygame.transform.flip(img, True, False)
+            imgBody = pygame.transform.flip(imgBody, True, False)
+
+        if x == 0 and y > 0:
+            screen.blit(
+                img, (self.rect_body.x + mergex + lctFlip, self.rect_body.y + mergey))
+            screen.blit(
+                imgBody, (self.rect_body.x - block/2 + lctFlip, self.rect_body.y - block/2 + move))
+        else:
+            screen.blit(
+                imgBody, (self.rect_body.x - block/2 + lctFlip, self.rect_body.y - block/2 + move))
+            screen.blit(
+                img, (self.rect_body.x + mergex + lctFlip, self.rect_body.y + mergey))
+
+        return k, h
 
 
 class Diamond:
@@ -115,5 +240,4 @@ class Diamond:
             step *= -1
         k += step
         screen.blit(self.object[2], (lct_x, lcx_y+k))
-        print(step, k)
         return k, step

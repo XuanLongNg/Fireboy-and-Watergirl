@@ -1,37 +1,45 @@
 import pygame
-import img
-from color import *
-from character import *
+import pickle
+from pygame.locals import *
 from setting import *
+from Character import *
+from Map import *
+from os import path
 
-source = pygame.image.load(
-    "D:\Project\Fire_boy_and_water_girl\IMG\CharAssets.png")
-clock = pygame.time.Clock()
+pygame.init()
+pygame.display.set_caption('Platformer')
+
+# define game variables
 screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
+fps = 20
+ani_head, ani_body = 0, 0
+moveX, moveY, bottom = 0, 0, 0
+x, y = 0, 0
+level = 1
+world_data = []
+if path.exists(f'level{level}_data'):
+    pickle_in = open(f'level{level}_data', 'rb')
+    world_data = pickle.load(pickle_in)
 
-pygame.draw.rect(screen, white, pygame.Rect(0, 700, 1366, 68))
-map = []
-for i in range(0, width, 20):
-    map.append((i, True))
-map.append((map[-1][0]+20, True))
-# for i in map:
-#     print(i)
 
-animation = 0
-animation_dia = 0
-step = 0.2
-game_over = False
+player = Character(charAssets, block*2, height - block*6)
+world = Map(world_data)
 
-while not game_over:
-    screen.fill(black)
+game_over = True
+while game_over:
+    draw_background()
+    world.draw_map()
+    # bottom = world.world_data[int(player.rect_body[1] //
+    #                           block)+1][int(player.rect_body[0]//block)]
+    moveX, moveY = player.update(moveX, moveY, world.world_data)
+    ani_head, ani_body = player.update_animation(
+        moveX, moveY, screen, ani_head, ani_body)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            game_over = True
-    char = Character(source)
-    diamond = Diamond(source)
-    animation = char.update_animation(0, 0, screen, 150, 150, animation)
-    animation_dia, step = diamond.update_animation(
-        screen, 250, 250, animation_dia, step)
+            game_over = False
+
     pygame.display.update()
-    clock.tick(50)
+    clock.tick(fps)
 pygame.quit()
