@@ -2,7 +2,7 @@ import pygame
 import pickle
 from pygame.locals import *
 from setting import *
-from Character import *
+from character import *
 from Map import *
 from os import path
 
@@ -30,9 +30,9 @@ game_over = True
 while game_over:
     draw_background()
     world.draw_map()
-    # bottom = world.world_data[int(player.rect_body[1] //
-    #                           block)+1][int(player.rect_body[0]//block)]
-    moveX, moveY = player.update(moveX, moveY, world.world_data)
+    # bottom = world.world_data[int(player.rect_body.y //
+    #                           block)+1][int(player.rect_body.x//block)][3]
+    moveX, moveY = player.update(moveX, moveY, world)
     ani_head, ani_body = player.update_animation(
         moveX, moveY, screen, ani_head, ani_body)
 

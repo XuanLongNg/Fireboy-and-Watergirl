@@ -2,25 +2,31 @@ import pygame
 from setting import *
 clock = pygame.time.Clock()
 ibs = 32
-character = pygame.image.load('IMG/CharAssets.png')
-topographic = pygame.transform.scale(templeAssets.subsurface(
-    ibs*16+8, ibs * 16+8, ibs*8, ibs*8), (block*8, block*8))
+lava = pygame.image.load('IMG/GroundAssets.png')
+# topographic = pygame.transform.scale(templeAssets.subsurface(
+#     ibs*16+8, ibs * 16+8, ibs*8, ibs*8), (block*8, block*8))
 # k = pygame.image.load("\IMGCharAssets.png")
 cs = 136
 arr = [
-    character.subsurface(cs*11-11.1, 15, cs, cs),  # 11
-    character.subsurface(cs*12+30, 15, cs, cs),
-    character.subsurface(cs*13+72, 15, cs, cs),
-    character.subsurface(cs*11-11.1, 161, cs, cs),
-    character.subsurface(cs*12+30, 161, cs, cs),  # 15
-    character.subsurface(cs*13+72, 161, cs, cs),
-    character.subsurface(10.1, 223, cs, cs),
-    character.subsurface(cs+52, 223, cs, cs),
-    character.subsurface(cs*2+94, 223, cs, cs),
-    character.subsurface(cs*4, 223, cs, cs),
-    character.subsurface(cs*5+42, 223, cs, cs),
+
+    lava.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
+    lava.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
+    lava.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
+    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*30 + ibs*0.7, ibs*42, ibs, ibs),
+    lava.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),
+    lava.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),
+    lava.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+    lava.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+    lava.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+
 ]
-body = character.subsurface(cs*6+90, cs*2, cs, cs)
+# body = lava.subsurface(cs*6+90, cs*2, cs, cs)
 screen = pygame.display.set_mode((width, height))
 
 
@@ -46,10 +52,10 @@ def dis(arr, i):
     # h = i//10
     screen.fill(white)
     draw_grid()
+    # screen.blit(pygame.transform.scale(
+    #     body, (block*3, block*3)), (block*5-block/2, block*5-block/2))
     screen.blit(pygame.transform.scale(
-        body, (block*3, block*3)), (block*5-block/2, block*5-block/2))
-    screen.blit(pygame.transform.scale(
-        arr[i], (block*3, block*3)), (block*5-block*1.2, block*5-block*1.2))
+        arr[i], (block, block)), (block*5, block*5))
 
 
     # screen.blit(pygame.transform.scale(

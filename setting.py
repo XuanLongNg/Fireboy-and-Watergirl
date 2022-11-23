@@ -5,9 +5,9 @@ height_menu = 768
 width_menu = 1366
 
 # map setting
-block = 20
-cols = 39
-rows = 29
+block = 30
+cols = 20
+rows = 20
 height = block * rows
 width = block * cols
 ibs = 32  # image box size

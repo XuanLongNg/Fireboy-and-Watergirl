@@ -6,7 +6,7 @@ from setting import *
 class Character():
     def __init__(self, character, x, y):
         # logic game
-        self.rect_body = pygame.Rect(x, y-block, block, block*2)
+        self.rect_body = pygame.Rect(x, y, block, block*2)
         # self.rect_body = [0, 0]
         # self.rect_body.x = x
         # self.rect_body.y = y
@@ -108,11 +108,14 @@ class Character():
             self.vel_y = -block*0.6
             self.jumped = True
             y = 1
+        # if key[pygame.K_w] == False:
+        #     self.jumped = False
+        #     y = 0
         if key[pygame.K_a]:
-            dx -= block/2
+            dx -= block/3
             x = -1
         if key[pygame.K_d]:
-            dx += block/2
+            dx += block/3
             x = 1
         # if bottom > 0:
         #     self.jumped = False
@@ -128,9 +131,23 @@ class Character():
         dy += self.vel_y
 
         # check for collision
-        # for i in world:
-        # if i[]
-
+        for i in map.world_data:
+            for j in i:
+                # check for collision in x direction
+                if j[1].colliderect(self.rect_body.x + dx, self.rect_body.y - block, block, block*2):
+                    dx = 0
+                # check for collision in y direction
+                if j[1].colliderect(self.rect_body.x, self.rect_body.y + dy - block, block, block*2):
+                    # check if below the ground i.e. jumping
+                    if self.vel_y < 0:
+                        dy = j[1].bottom - self.rect_body.top + block
+                        self.vel_y = 0
+                    # check if above the ground i.e. falling
+                    elif self.vel_y >= 0:
+                        dy = j[1].top - self.rect_body.bottom + block
+                        self.vel_y = 0
+                        self.jumped = False
+                        y = 0
         # update player coordinates
         self.rect_body.x += dx
         self.rect_body.y += dy
@@ -142,8 +159,8 @@ class Character():
 
     # update character's animation
     def update_animation(self, x, y, screen, k, h):
-        pygame.draw.rect(
-            screen, white, (self.rect_body.x, self.rect_body.y-block, block, block*2), 2)
+        # pygame.draw.rect(
+        # screen, white, (self.rect_body.x, self.rect_body.y-block, block, block*2), 2)
 
         mergex, mergey, degree, move, lctFlip = 0, 0, 0, 0, 0
         flip = False
@@ -223,22 +240,3 @@ class Character():
                 img, (self.rect_body.x + mergex + lctFlip, self.rect_body.y + mergey))
 
         return k, h
-
-
-class Diamond:
-    def __init__(self, object):
-        cs = 136
-        self.object = [
-            object.subsurface(0, cs*10-20, cs-26, cs-26),  # red blue
-            object.subsurface(cs*6+33, cs*10-20, cs-26, cs-26),  # white
-            object.subsurface(cs*7+17, cs*10-20, cs-26, cs-26),  # blue
-            object.subsurface(cs*8-2, cs*10-20, cs-26, cs-26),  # red
-        ]
-    # update character's animation
-
-    def update_animation(self, screen, lct_x, lcx_y, k, step):
-        if round(abs(k)) == 5:
-            step *= -1
-        k += step
-        screen.blit(self.object[2], (lct_x, lcx_y+k))
-        return k, step
