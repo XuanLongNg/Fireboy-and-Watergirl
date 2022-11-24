@@ -2,7 +2,7 @@ import pygame
 import pickle
 from pygame.locals import *
 from setting import *
-from Character import *
+from character import *
 from Map import *
 from Object import *
 from os import path

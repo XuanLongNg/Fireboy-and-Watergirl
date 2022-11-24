@@ -146,7 +146,7 @@ class Character():
         # if pygame.sprite.spritecollide(self, lava_ground, False):
         #     game_over = True
         if pygame.sprite.spritecollide(self, diamond_ground, True):
-            temp = pygame.sprite.spritecollide(self, diamond_ground, True)
+            # temp = pygame.sprite.spritecollide(self, diamond_ground, True)
             for i in temp:
                 print(i, end=" ")
             print()
