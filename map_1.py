@@ -26,22 +26,32 @@ if path.exists(f'level{level}_data'):
 # object initialization
 player = Character(charAssets, block*2, height - block*6)
 world = Map(world_data)
-# lava = [Lava(groundAssets, block * 18, height - block*1.5)]
-diamond = [Diamond(charAssets, block * 29, height - block*3),
-           Diamond(charAssets, block * 23, block*4),
-           Diamond(charAssets, block * 2, block*5),
-           Diamond(charAssets, block * 23, block*14)]
+diamond_ground = pygame.sprite.Group()
+lava_ground = pygame.sprite.Group()
+
+
+# Add object
+
+diamond_ground.add(Diamond(charAssets, block * 29, height - block*3))
+diamond_ground.add(Diamond(charAssets, block * 23, block*4))
+diamond_ground.add(Diamond(charAssets, block * 2, block*5))
+diamond_ground.add(Diamond(charAssets, block * 23, block*14))
+
+lava_ground.add(Lava(groundAssets, block * 18, height - block*1.5))
 run = True
 game_over = False
 while run:
     draw_background()
     world.draw_map()
-    # lava[0].update_animation(screen)
-    for i in diamond:
+    for i in lava_ground:
+        i.update_animation(screen)
+    for i in diamond_ground:
         i.update_animation(screen, 2, True)
-    moveX, moveY = player.update(moveX, moveY, world, game_over, 0, diamond)
+    moveX, moveY, game_over = player.update(
+        moveX, moveY, world, game_over, lava_ground, diamond_ground)
     player.update_animation(moveX, moveY, screen)
-    # print(game_over)
+    if game_over:
+        run = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False

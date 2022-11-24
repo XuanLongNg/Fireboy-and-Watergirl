@@ -14,7 +14,8 @@ world_data = Map(world_data)
 for i in world_data.world_data:
     for j in i:
         screen.blit(j[0], j[1])
-
+        print(j[2], end=" ")
+    print()
 clock = pygame.time.Clock()
 fps = 30
 game_over = True

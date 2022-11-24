@@ -98,7 +98,7 @@ class Character():
     # logic game
     def update(self, x, y, map, game_over, lava_ground, diamond_ground):
         if game_over == True:
-            return
+            0, 0, game_over
         dx = 0
         dy = 0
         x = 0
@@ -106,7 +106,7 @@ class Character():
         key = pygame.key.get_pressed()
         if key[pygame.K_w] and self.jumped == False:
             self.vel_y = -block*0.6
-            # self.jumped = True
+            self.jumped = True
             y = 1
         if key[pygame.K_a]:
             dx -= block/3
@@ -143,13 +143,12 @@ class Character():
                         y = 0
 
         # check for collision with lava
-        # if pygame.sprite.spritecollide(self, lava_ground, False):
-        #     game_over = True
+        if pygame.sprite.spritecollide(self, lava_ground, False):
+            game_over = True
+            # print("cham")
+        # check for collision with diamond
         if pygame.sprite.spritecollide(self, diamond_ground, True):
-            # temp = pygame.sprite.spritecollide(self, diamond_ground, True)
-            for i in temp:
-                print(i, end=" ")
-            print()
+            pass
         # update player coordinates
         if dy > 0:
             y = -1
@@ -160,7 +159,7 @@ class Character():
         if self.rect.y > height-block:
             self.rect.y = height-block
             dy = 0
-        return x, y
+        return x, y, game_over
 
     # update character's animation
     def update_animation(self, x, y, screen):

@@ -2,100 +2,100 @@ import pygame
 from setting import *
 
 
-# class Lava(pygame.sprite.Sprite):
-#     def __init__(self, object, x, y, world_data):
-#         pygame.sprite.Sprite.__init__(self)
-#         self.step = 0
-#         self.rect = pygame.Rect(x, y, block*5, block*0.5)
-#         # self.background =
-#         self.object = [
-#             [
-#                 object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
-#                 object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),  # 5
-#                 object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*30 + ibs*0.7, ibs*42, ibs, ibs),
-#                 object.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),  # 10
-#                 object.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*3 + ibs*0.7, ibs*44 - \
-#                                   ibs*0.3, ibs, ibs)  # 14
-#             ],
-#             [
-#                 object.subsurface(ibs*2 - ibs/30, ibs*43 -
-#                                   ibs*0.82, ibs, ibs),  # 0
-#                 object.subsurface(ibs*2 - ibs/30, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*2 - ibs/30, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*5 + ibs*0.33, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*5 + ibs*0.33, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*5 + ibs*0.33, ibs*43 - \
-#                                   ibs*0.82, ibs, ibs),  # 5
-#                 object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
-#                 object.subsurface(ibs*22 + ibs*0.2, ibs*40-ibs*1.05, ibs, ibs),
-#                 object.subsurface(ibs*22 + ibs*0.2, ibs*40 - \
-#                                   ibs*1.05, ibs, ibs),  # 10
-#                 object.subsurface(ibs*22 + ibs*0.2, ibs*40-ibs*1.05, ibs, ibs),
-#                 object.subsurface(ibs*27+ibs*0.3, ibs*40-ibs*1.05, ibs, ibs),
-#                 object.subsurface(ibs*27+ibs*0.3, ibs*40-ibs*1.05, ibs, ibs),
-#                 object.subsurface(ibs*27+ibs*0.3, ibs*40 - \
-#                                   ibs*1.05, ibs, ibs)  # 14
-#             ],
-#             [
-#                 object.subsurface(ibs*8 + ibs*0.7, ibs*44 - \
-#                                   ibs*0.3, ibs, ibs),  # 0
-#                 object.subsurface(ibs*8 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*8 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*13 + ibs*0.75, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*13 + ibs*0.75, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*13 + ibs*0.75, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),  # 5
-#                 object.subsurface(ibs*18 + ibs*0.84, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*18 + ibs*0.84, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*18 + ibs*0.84, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*23 + ibs*0.9, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*23 + ibs*0.9, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),  # 10
-#                 object.subsurface(ibs*23 + ibs*0.9, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*29 - ibs*0.05, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*29 - ibs*0.05, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),
-#                 object.subsurface(ibs*29 - ibs*0.05, ibs * \
-#                                   44 - ibs*0.3, ibs, ibs),  # 14
-#             ]
-#         ]
+class Lava(pygame.sprite.Sprite):
+    def __init__(self, object, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.step = 0
+        self.rect = pygame.Rect(
+            x+block*0.8, y+0.5*block, block*4-block*0.8, block*0.5)
+        self.object = [
+            [
+                object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
+                object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),
+                object.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),
+                object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
+                object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
+                object.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),  # 5
+                object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+                object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+                object.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+                object.subsurface(ibs*30 + ibs*0.7, ibs*42, ibs, ibs),
+                object.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),  # 10
+                object.subsurface(ibs*2, ibs*44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*3 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*3 + ibs*0.7, ibs*44 - \
+                                  ibs*0.3, ibs, ibs)  # 14
+            ],
+            [
+                object.subsurface(ibs*2 - ibs/30, ibs*43 -
+                                  ibs*0.82, ibs, ibs),  # 0
+                object.subsurface(ibs*2 - ibs/30, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*2 - ibs/30, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*5 + ibs*0.33, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*5 + ibs*0.33, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*5 + ibs*0.33, ibs*43 - \
+                                  ibs*0.82, ibs, ibs),  # 5
+                object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*10 + ibs*0.4, ibs*43-ibs*0.82, ibs, ibs),
+                object.subsurface(ibs*22 + ibs*0.2, ibs*40-ibs*1.05, ibs, ibs),
+                object.subsurface(ibs*22 + ibs*0.2, ibs*40 - \
+                                  ibs*1.05, ibs, ibs),  # 10
+                object.subsurface(ibs*22 + ibs*0.2, ibs*40-ibs*1.05, ibs, ibs),
+                object.subsurface(ibs*27+ibs*0.3, ibs*40-ibs*1.05, ibs, ibs),
+                object.subsurface(ibs*27+ibs*0.3, ibs*40-ibs*1.05, ibs, ibs),
+                object.subsurface(ibs*27+ibs*0.3, ibs*40 - \
+                                  ibs*1.05, ibs, ibs)  # 14
+            ],
+            [
+                object.subsurface(ibs*8 + ibs*0.7, ibs*44 - \
+                                  ibs*0.3, ibs, ibs),  # 0
+                object.subsurface(ibs*8 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*8 + ibs*0.7, ibs*44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*13 + ibs*0.75, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*13 + ibs*0.75, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*13 + ibs*0.75, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),  # 5
+                object.subsurface(ibs*18 + ibs*0.84, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*18 + ibs*0.84, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*18 + ibs*0.84, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*23 + ibs*0.9, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*23 + ibs*0.9, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),  # 10
+                object.subsurface(ibs*23 + ibs*0.9, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*29 - ibs*0.05, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*29 - ibs*0.05, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),
+                object.subsurface(ibs*29 - ibs*0.05, ibs * \
+                                  44 - ibs*0.3, ibs, ibs),  # 14
+            ]
+        ]
 
-#         # update character's animation
-#     def update_animation(self, screen):
-#         if self.step > 13:
-#             self.step = -1
-#         self.step += 1
+        # update character's animation
+    def update_animation(self, screen):
+        if self.step > 13:
+            self.step = -1
+        self.step += 1
 
-#         screen.blit(pygame.transform.scale(
-#             self.object[0][self.step], (block, block)), (self.rect.x, self.rect.y))
-#         screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
-#                     (self.rect.x+block, self.rect.y))
-#         screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
-#                     (self.rect.x+block*2, self.rect.y))
-#         screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
-#                     (self.rect.x+block*3, self.rect.y))
-#         screen.blit(pygame.transform.scale(self.object[2][self.step], (block, block)),
-#                     (self.rect.x+block*4, self.rect.y))
+        screen.blit(pygame.transform.scale(
+            self.object[0][self.step], (block, block)), (self.rect.x - block*0.8, self.rect.y - block*0.5))
+        screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
+                    (self.rect.x - block*0.8 + block, self.rect.y - block*0.5))
+        screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
+                    (self.rect.x - block*0.8 + block*2, self.rect.y - block*0.5))
+        screen.blit(pygame.transform.scale(self.object[1][self.step], (block, block)),
+                    (self.rect.x - block*0.8 + block*3, self.rect.y - block*0.5))
+        screen.blit(pygame.transform.scale(self.object[2][self.step], (block, block)),
+                    (self.rect.x - block*0.8 + block*4, self.rect.y - block*0.5))
 
 
 class Diamond(pygame.sprite.Sprite):
@@ -114,8 +114,8 @@ class Diamond(pygame.sprite.Sprite):
     # update character's animation
 
     def update_animation(self, screen, diamond, display):
-        pygame.draw.rect(
-            screen, white, (self.rect.x, self.rect.y, block*1.2, block*1.2), 2)
+        # pygame.draw.rect(
+        #     screen, white, (self.rect.x, self.rect.y, block*1.2, block*1.2), 2)
         if display == False:
             return
         # if abs(self.stepAni) == 5:
@@ -124,4 +124,14 @@ class Diamond(pygame.sprite.Sprite):
         # self.rect.y = round((self.rect.y+self.step)*10)/10
         screen.blit(pygame.transform.scale(
             self.object[2], (block*3, block*3)), (self.rect.x-block, self.rect.y-block))
-        # print(self.stepAni, self.step, self.rect.y)
+
+
+class TransportBar:
+    def __init__(self, object, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.step = 0
+        self.rect = pygame.Rect(
+            x+block*0.8, y+0.5*block, block*4-block*0.8, block*0.5)
+        self.object = [
+            o
+        ]
