@@ -145,8 +145,8 @@ class Character():
         # check for collision with lava
         # if pygame.sprite.spritecollide(self, lava_ground, False):
         #     game_over = True
-        if pygame.sprite.spritecollide(self, diamond_ground, False):
-            temp = pygame.sprite.spritecollide(self, diamond_ground, False)
+        if pygame.sprite.spritecollide(self, diamond_ground, True):
+            temp = pygame.sprite.spritecollide(self, diamond_ground, True)
             for i in temp:
                 print(i, end=" ")
             print()
