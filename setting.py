@@ -5,9 +5,9 @@ height_menu = 768
 width_menu = 1366
 
 # map setting
-block = 30
-cols = 20
-rows = 20
+block = 20
+cols = 39
+rows = 29
 height = block * rows
 width = block * cols
 ibs = 32  # image box size
@@ -32,6 +32,7 @@ templeAssets = pygame.image.load('IMG/TempleAssets.png')
 menuAssets = pygame.image.load('IMG/MenuAssets.png')
 mechAssets = pygame.image.load('IMG/MechAssets.png')
 charAssets = pygame.image.load("IMG/CharAssets.png")
+groundAssets = pygame.image.load('IMG/GroundAssets.png')
 
 background = pygame.transform.scale(templeAssets.subsurface(
     ibs*8+4, ibs * 16+8, ibs*8, ibs*8), (block*8, block*8))  # 1

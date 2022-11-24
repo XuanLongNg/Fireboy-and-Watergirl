@@ -1,9 +1,2 @@
-0.5, ibs*42, ibs, ibs),  # 0
-    lava.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
-    lava.subsurface(ibs*15 + ibs*0.5, ibs*42, ibs, ibs),  # 0
-    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
-    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
-    lava.subsurface(ibs*20 + ibs*0.5, ibs*42, ibs, ibs),
-    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
-    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
-    lava.subsurface(ibs*25 + ibs*0.6, ibs*42, ibs, ibs),
+ bottom = world.world_data[int(player.rect_body.y //
+    #                           block)+1][int(player.rect_body.x//block)][3]

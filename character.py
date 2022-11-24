@@ -6,13 +6,11 @@ from setting import *
 class Character():
     def __init__(self, character, x, y):
         # logic game
-        self.rect_body = pygame.Rect(x, y, block, block*2)
-        # self.rect_body = [0, 0]
-        # self.rect_body.x = x
-        # self.rect_body.y = y
+        self.rect = pygame.Rect(x, y, block, block*2)
         self.vel_y = 0
         self.jumped = False
-
+        self.step_head = 0  # step animation head
+        self.step_body = 0  # step animation body
         # animation
         cs = 136
         self.characters = [
@@ -98,7 +96,9 @@ class Character():
         ]
 
     # logic game
-    def update(self, x, y, map):
+    def update(self, x, y, map, game_over, lava_ground, diamond_ground):
+        if game_over == True:
+            return
         dx = 0
         dy = 0
         x = 0
@@ -106,22 +106,15 @@ class Character():
         key = pygame.key.get_pressed()
         if key[pygame.K_w] and self.jumped == False:
             self.vel_y = -block*0.6
-            self.jumped = True
+            # self.jumped = True
             y = 1
-        # if key[pygame.K_w] == False:
-        #     self.jumped = False
-        #     y = 0
         if key[pygame.K_a]:
             dx -= block/3
             x = -1
         if key[pygame.K_d]:
             dx += block/3
             x = 1
-        # if bottom > 0:
-        #     self.jumped = False
-        #     y = 0
         # add gravity
-
         self.vel_y += 1
         if self.vel_y == 0:
             y = -1
@@ -134,48 +127,60 @@ class Character():
         for i in map.world_data:
             for j in i:
                 # check for collision in x direction
-                if j[1].colliderect(self.rect_body.x + dx, self.rect_body.y - block, block, block*2):
+                if j[1].colliderect(self.rect.x + dx, self.rect.y - block, block, block*2):
                     dx = 0
                 # check for collision in y direction
-                if j[1].colliderect(self.rect_body.x, self.rect_body.y + dy - block, block, block*2):
+                if j[1].colliderect(self.rect.x, self.rect.y + dy - block, block, block*2):
                     # check if below the ground i.e. jumping
                     if self.vel_y < 0:
-                        dy = j[1].bottom - self.rect_body.top + block
+                        dy = j[1].bottom - self.rect.top + block
                         self.vel_y = 0
                     # check if above the ground i.e. falling
                     elif self.vel_y >= 0:
-                        dy = j[1].top - self.rect_body.bottom + block
+                        dy = j[1].top - self.rect.bottom + block
                         self.vel_y = 0
                         self.jumped = False
                         y = 0
-        # update player coordinates
-        self.rect_body.x += dx
-        self.rect_body.y += dy
 
-        if self.rect_body.y > height-block:
-            self.rect_body.y = height-block
+        # check for collision with lava
+        # if pygame.sprite.spritecollide(self, lava_ground, False):
+        #     game_over = True
+        if pygame.sprite.spritecollide(self, diamond_ground, False):
+            temp = pygame.sprite.spritecollide(self, diamond_ground, False)
+            for i in temp:
+                print(i, end=" ")
+            print()
+        # update player coordinates
+        if dy > 0:
+            y = -1
+            self.jumped = True
+        self.rect.x += dx
+        self.rect.y += dy
+
+        if self.rect.y > height-block:
+            self.rect.y = height-block
             dy = 0
         return x, y
 
     # update character's animation
-    def update_animation(self, x, y, screen, k, h):
+    def update_animation(self, x, y, screen):
         # pygame.draw.rect(
-        # screen, white, (self.rect_body.x, self.rect_body.y-block, block, block*2), 2)
+        # screen, white, (self.rect.x, self.rect.y-block, block, block*2), 2)
 
         mergex, mergey, degree, move, lctFlip = 0, 0, 0, 0, 0
         flip = False
         if x == 0 and y == 0:  # stay
-            if k > 58 or k <= 29:
-                k = 29
-            h = 59
+            if self.step_head > 58 or self.step_head <= 29:
+                self.step_head = 29
+            self.step_body = 59
             mergex = - block * 0.8
             mergey = - block * 1.5
         else:
             if abs(x) > 0 and y == 0:  # move
-                if k > 20 or k < 11:
-                    k = 10
-                if h < 22 or h > 28:
-                    h = 21
+                if self.step_head > 20 or self.step_head < 11:
+                    self.step_head = 10
+                if self.step_body < 22 or self.step_body > 28:
+                    self.step_body = 21
                 mergex = - block * 1.2
                 mergey = - block * 1.1
                 move = - 0.2
@@ -185,21 +190,21 @@ class Character():
                     mergex = block * 0.2
             elif x == 0 and abs(y) > 0:  # jump and fall
                 if y < 0:
-                    if k > 9:
-                        k = -1
+                    if self.step_head > 9:
+                        self.step_head = -1
                     mergex = - block * 0.8
                     mergey = - block * 2
                 if y > 0:
-                    if k <= 60 or k > 69:
-                        k = 60
+                    if self.step_head <= 60 or self.step_head > 69:
+                        self.step_head = 60
                     mergex = - block * 0.8
                     mergey = - block * 1.5
-                h = 59
+                self.step_body = 59
             else:  # jump and move
-                if k > 20 or k < 11:
-                    k = 10
-                if h < 22 or h > 28:
-                    h = 21
+                if self.step_head > 20 or self.step_head < 11:
+                    self.step_head = 10
+                if self.step_body < 22 or self.step_body > 28:
+                    self.step_body = 21
                 # degree = 45
                 # mergex = - block * 1
                 # mergey = - block * 1
@@ -217,26 +222,24 @@ class Character():
                 #     degree = -45
                 #     mergex = 0
                 #     mergey = - block * 1.2
-        k += 1
-        h += 1
+        self.step_head += 1
+        self.step_body += 1
         degree = 0
         img = pygame.transform.scale(pygame.transform.rotate(
-            self.characters[k], degree), (block*3, block*3))
+            self.characters[self.step_head], degree), (block*3, block*3))
         imgBody = pygame.transform.scale(
-            self.characters[h], (block*3, block*3))
+            self.characters[self.step_body], (block*3, block*3))
         if flip:
             img = pygame.transform.flip(img, True, False)
             imgBody = pygame.transform.flip(imgBody, True, False)
 
         if x == 0 and y > 0:
             screen.blit(
-                img, (self.rect_body.x + mergex + lctFlip, self.rect_body.y + mergey))
+                img, (self.rect.x + mergex + lctFlip, self.rect.y + mergey))
             screen.blit(
-                imgBody, (self.rect_body.x - block/2 + lctFlip, self.rect_body.y - block/2 + move))
+                imgBody, (self.rect.x - block/2 + lctFlip, self.rect.y - block/2 + move))
         else:
             screen.blit(
-                imgBody, (self.rect_body.x - block/2 + lctFlip, self.rect_body.y - block/2 + move))
+                imgBody, (self.rect.x - block/2 + lctFlip, self.rect.y - block/2 + move))
             screen.blit(
-                img, (self.rect_body.x + mergex + lctFlip, self.rect_body.y + mergey))
-
-        return k, h
+                img, (self.rect.x + mergex + lctFlip, self.rect.y + mergey))
