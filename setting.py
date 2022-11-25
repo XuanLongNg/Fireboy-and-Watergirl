@@ -12,6 +12,8 @@ height = block * rows
 width = block * cols
 ibs = 32  # image box size
 
+# character setting
+speed = block/3
 # color
 white = (255, 255, 255)
 black = (0, 0, 0)

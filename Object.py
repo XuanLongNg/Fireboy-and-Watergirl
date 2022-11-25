@@ -3,8 +3,9 @@ from setting import *
 
 
 class Lava(pygame.sprite.Sprite):
-    def __init__(self, object, x, y):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+        object = groundAssets
         self.step = 0
         self.rect = pygame.Rect(
             x+block*0.8, y+0.5*block, block*4-block*0.8, block*0.5)
@@ -99,8 +100,9 @@ class Lava(pygame.sprite.Sprite):
 
 
 class Diamond(pygame.sprite.Sprite):
-    def __init__(self, object, x, y):
+    def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
+        object = charAssets
         self.rect = pygame.rect.Rect(x, y, block*1.2, block*1.2)
         cs = 136
         self.object = [
@@ -109,29 +111,128 @@ class Diamond(pygame.sprite.Sprite):
             object.subsurface(cs*7+17, cs*10-20, cs-26, cs-26),  # blue
             object.subsurface(cs*8-2, cs*10-20, cs-26, cs-26),  # red
         ]
-        self.step = 0.2
-        self.stepAni = 0
+        self.step = 0
+        self.stepAni = 2
     # update character's animation
 
-    def update_animation(self, screen, diamond, display):
-        # pygame.draw.rect(
-        #     screen, white, (self.rect.x, self.rect.y, block*1.2, block*1.2), 2)
-        if display == False:
-            return
-        # if abs(self.stepAni) == 5:
-        #     self.step *= -1
-        # self.stepAni = round((self.stepAni+self.step)*10)/10
-        # self.rect.y = round((self.rect.y+self.step)*10)/10
+    def update_animation(self, screen, diamond):
+        self.step += 2
+        if abs(self.step) > 40:
+            self.step *= -1
+            self.stepAni *= -1
+        self.rect.y += self.stepAni/2
         screen.blit(pygame.transform.scale(
             self.object[2], (block*3, block*3)), (self.rect.x-block, self.rect.y-block))
+        # pygame.draw.rect(
+        #     screen, white, (self.rect.x, self.rect.y, block*1.2, block*1.2), 2)
+        # print(self.step, self.stepAni, self.rect.y)
 
 
-class TransportBar:
-    def __init__(self, object, x, y):
+class TransportBar(pygame.sprite.Sprite):
+    def __init__(self, x, y, size, color, newX, newY):
         pygame.sprite.Sprite.__init__(self)
+        object = mechAssets
         self.step = 0
-        self.rect = pygame.Rect(
-            x+block*0.8, y+0.5*block, block*4-block*0.8, block*0.5)
+        self.rect = pygame.Rect(x, y, block*size, block)
+        self.old_rect = pygame.Rect(x, y, block*size, block)
+        self.new_rect = pygame.Rect(
+            x + newX*block, y+block*newY, block*size, block)
+        self.size = size
+        self.color = color
         self.object = [
-            o
+            object.subsurface(ibs*53 + ibs*0.2, ibs*0.23, ibs, ibs+2),  # 0
+            object.subsurface(ibs*57, ibs*0.23, ibs, ibs+2),
+            object.subsurface(ibs*54 + ibs*0.8, ibs*0.2, ibs, ibs+2)
         ]
+
+    def run(self, run):
+        stepX = 0
+        stepY = 0
+        if run:
+            if self.rect == self.new_rect:
+                return
+            if self.rect.x > self.new_rect.x:
+                stepX = -1
+            elif self.rect.x < self.new_rect.x:
+                stepX = 1
+            if self.rect.y > self.new_rect.y:
+                stepY = -1
+            elif self.rect.y < self.new_rect.y:
+                stepY = 1
+        else:
+            if self.rect == self.old_rect:
+                return
+            if self.rect.x > self.old_rect.x:
+                stepX = -1
+            elif self.rect.x > self.old_rect.x:
+                stepX = 1
+            if self.rect.y > self.old_rect.y:
+                stepY = -1
+            elif self.rect.y > self.new_rect.y:
+                stepY = 1
+        self.rect.x += stepX
+        self.rect.y += stepY
+
+    def update_animation(self, screen):
+        img = pygame.transform.scale(self.object[0], (block, block))
+        screen.blit(img, (self.rect.x, self.rect.y))
+        for i in range(1, len(self.object)):
+            img = pygame.transform.scale(self.object[1], (block, block))
+            screen.blit(img, (self.rect.x+block*i, self.rect.y))
+        img = pygame.transform.scale(self.object[2], (block, block))
+        screen.blit(img, (self.rect.x+block*(self.size-1), self.rect.y))
+        pygame.draw.rect(screen, self.color, pygame.Rect(
+            self.rect.x + block*0.55, self.rect.y + block*0.4, self.size*block-block*0.9, block*0.28))
+
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, x, y, color):
+        pygame.sprite.Sprite.__init__(self)
+        object = mechAssets
+        self.step = 0
+        self.rect = pygame.Rect(x, y, block*2.5, block*0.5)
+        self.old_rect = pygame.Rect(x, y, block*2.5, block*0.5)
+        self.new_rect = pygame.Rect(x, y+block-block*0.1, block*2.5, block*0.5)
+        self.color = color
+        self.object = [
+            object.subsurface(ibs*30 + ibs*0.8, ibs *
+                              27+ibs*0.5, ibs*2.5, ibs)  # 0
+        ]
+        self.stepY = 1
+
+    def run(self, run):
+        if run:
+            if self.rect == self.new_rect:
+                return
+            self.stepY = 1
+        else:
+            if self.rect == self.old_rect:
+                return
+            self.stepY = -1
+        self.rect.y += self.stepY
+
+    def update_animation(self, screen):
+        for i in range(len(self.object)):
+            img = pygame.transform.scale(
+                self.object[i], (block*2.5, block*0.7))
+            screen.blit(img, (self.rect.x, self.rect.y+block*0.5))
+
+
+class Box:
+    def __init__(self, x, y):
+        object = mechAssets
+        self.rect = pygame.Rect(x, y, block*2, block*2)
+        self.object = [
+            object.subsurface(ibs*48 + ibs*0.4, ibs*0.15, ibs*2.15, ibs*2.15)
+        ]
+
+    def update_animation(self, screen):
+        img = pygame.transform.scale(
+            self.object[0], (block*2, block*2))
+        screen.blit(img, (self.rect.x, self.rect.y))
+
+
+class Linked:
+    def __init__(self, impact, bar):
+        self.impact = impact
+        self.bar = bar
