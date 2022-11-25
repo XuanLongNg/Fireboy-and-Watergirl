@@ -225,6 +225,38 @@ class Box:
         self.object = [
             object.subsurface(ibs*48 + ibs*0.4, ibs*0.15, ibs*2.15, ibs*2.15)
         ]
+        self.vel_y = 0
+
+    def update(self, moveX, world_data):
+        dx = 0
+        dy = 0
+        self.rect.x += moveX
+        # self.rect.y += moveY
+        # add gravity
+        self.vel_y += 1
+        if self.vel_y == 0:
+            y = -1
+        if self.vel_y >= block/2:
+            self.vel_y = block/2
+
+        dy += self.vel_y
+        # check for collision
+        for i in world_data:
+            for j in i:
+                # check for collision in x direction
+                if j[1].colliderect(self.rect.x + dx, self.rect.y, block*2, block*2):
+                    dx = 0
+                # check for collision in y direction
+                if j[1].colliderect(self.rect.x, self.rect.y + dy-block, block*2, block*2):
+                    # check if below the ground i.e. jumping
+                    if self.vel_y < 0:
+                        dy = j[1].bottom - self.rect.top + block
+                        self.vel_y = 0
+                    # check if above the ground i.e. falling
+                    elif self.vel_y >= 0:
+                        dy = j[1].top - self.rect.bottom+block
+                        self.vel_y = 0
+        self.rect.y += dy
 
     def update_animation(self, screen):
         img = pygame.transform.scale(

@@ -97,9 +97,9 @@ class Character1():
         ]
 
     # logic game
-    def update(self, x, y, map, game_over, lava_ground, diamond_ground, linked, run):
+    def update(self, x, y, map, game_over, lava_ground, diamond_ground, linked, run, box):
         if game_over == True:
-            0, 0, game_over, run
+            0, 0, game_over, run, box
         dx = 0
         dy = 0
         x = 0
@@ -175,6 +175,17 @@ class Character1():
                         self.vel_y = 0
                         self.jumped = False
                         y = 0
+        # check for collision with box
+        for i in box:
+            if i.rect.colliderect(self.rect.x + dx, self.rect.y - block, block, block*2):
+                dx = 0
+                if key[pygame.K_a]:
+                    dx = -speed/2
+                    x = -1
+                if key[pygame.K_d]:
+                    dx = +speed/2
+                    x = 1
+
         # update player coordinates
         if dy > 0:
             y = -1
@@ -185,12 +196,12 @@ class Character1():
         if self.rect.y > height-block:
             self.rect.y = height-block
             dy = 0
-        return x, y, game_over, run
+        return x, y, game_over, run, box
 
     # update character's animation
     def update_animation(self, x, y, screen):
-        pygame.draw.rect(
-            screen, white, (self.rect.x, self.rect.y-block, block, block*2), 2)
+        # pygame.draw.rect(
+        #     screen, white, (self.rect.x, self.rect.y-block, block, block*2), 2)
 
         mergex, mergey, degree, move, lctFlip = 0, 0, 0, 0, 0
         flip = False
@@ -364,9 +375,9 @@ class Character2():
         ]
 
     # logic game
-    def update(self, x, y, map, game_over, lava_ground, diamond_ground, linked, run):
+    def update(self, x, y, map, game_over, lava_ground, diamond_ground, linked, run, box):
         if game_over == True:
-            0, 0, game_over, run
+            0, 0, game_over, run, box
         dx = 0
         dy = 0
         x = 0
@@ -441,6 +452,16 @@ class Character2():
                         self.vel_y = 0
                         self.jumped = False
                         y = 0
+        # check for collision with box
+        for i in box:
+            if i.rect.colliderect(self.rect.x + dx, self.rect.y - block, block, block*2):
+                dx = 0
+                if key[pygame.K_a]:
+                    dx = -speed/2
+                    x = -1
+                if key[pygame.K_d]:
+                    dx = +speed/2
+                    x = 1
         # update player coordinates
         if dy > 0:
             y = -1
@@ -451,7 +472,7 @@ class Character2():
         if self.rect.y > height-block:
             self.rect.y = height-block
             dy = 0
-        return x, y, game_over, run
+        return x, y, game_over, run, box
 
     # update character's animation
     def update_animation(self, x, y, screen):

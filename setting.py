@@ -5,7 +5,7 @@ height_menu = 768
 width_menu = 1366
 
 # map setting
-block = 25
+block = 20
 cols = 39
 rows = 29
 height = block * rows

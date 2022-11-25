@@ -46,7 +46,7 @@ linked.append(Linked([Button(block*10, height - block*15, red),
                      Button(block*29, height - block*19, red)],
                      [TransportBar(width-5*block, block*11, 4, blue, 0, 4)]))
 
-box.append(Box(block*22, height - block*22))
+box.append(Box(block*10, height - block*22))
 run = True
 game_over = False
 change1, change2 = [], []
@@ -75,12 +75,13 @@ while run:
     for i in diamond_ground:
         i.update_animation(screen, 2)
     for i in box:
+        i.update(0, world.world_data)
         i.update_animation(screen)
-    moveX, moveY, game_over, change1 = player1.update(
-        moveX, moveY, world, game_over, lava_ground, diamond_ground, linked, change1)
+    moveX, moveY, game_over, change1, box = player1.update(
+        moveX, moveY, world, game_over, lava_ground, diamond_ground, linked, change1, box)
     player1.update_animation(moveX, moveY, screen)
-    moveX, moveY, game_over, change2 = player2.update(
-        moveX, moveY, world, game_over, lava_ground, diamond_ground, linked, change2)
+    moveX, moveY, game_over, change2, box = player2.update(
+        moveX, moveY, world, game_over, lava_ground, diamond_ground, linked, change2, box)
     player2.update_animation(moveX, moveY, screen)
     if game_over:
         run = False
