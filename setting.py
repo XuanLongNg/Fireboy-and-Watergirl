@@ -5,12 +5,19 @@ height_menu = 768
 width_menu = 1366
 
 # map setting
-block = 20
+block = 25
 cols = 39
 rows = 29
 height = block * rows
 width = block * cols
 ibs = 32  # image box size
+# funtion settings
+
+
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    pygame.display.set_mode((width, height)).blit(img, (x, y))
+
 
 # character setting
 speed = block/3

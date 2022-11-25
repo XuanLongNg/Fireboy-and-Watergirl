@@ -88,6 +88,5 @@ class Map():
         for row in self.world_data:
             for col in row:
                 screen.blit(col[0], col[1])
-                # print(col[1])
                 # pygame.draw.rect(
-                #     screen, white, (col * block, row * block, block, block), 2)
+                #     screen, white, col[1], 2)

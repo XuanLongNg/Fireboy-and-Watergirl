@@ -2,15 +2,12 @@ import pygame
 from setting import *
 clock = pygame.time.Clock()
 ibs = 32
-bar = pygame.image.load('IMG/MechAssets.png')
-# topographic = pygame.transform.scale(templeAssets.subsurface(
-#     ibs*16+8, ibs * 16+8, ibs*8, ibs*8), (block*8, block*8))
-# k = pygame.image.load("\IMGCharAssets.png")
+object = templeAssets
+block = 50
 cs = 136
 arr = [
-    bar.subsurface(ibs*48 + ibs*0.4, ibs*0.15, ibs*2.15, ibs*2.15),  # 0 # 0
-    # bar.subsurface(ibs*57, ibs*0.23, ibs, ibs+2),
-    # bar.subsurface(ibs*54 + ibs*0.8, ibs*0.2, ibs, ibs+2)
+    object.subsurface(ibs*0.7, ibs*37-ibs*0.2, ibs*3+ibs*0.6, ibs*4),  # 0
+
 ]
 screen = pygame.display.set_mode((width, height))
 
@@ -22,34 +19,32 @@ def draw_grid():
         pygame.draw.line(screen, black, (i*block, 0), (i*block, width))
 
 
-screen.fill(white)
-draw_grid()
-pygame.display.flip()
-
-for i in range(len(arr)):
-    screen.blit(pygame.transform.scale(
-        arr[i], (block*2, block*2)), (block*3, block*5))
+# for i in range(len(arr)):
+#     screen.blit(pygame.transform.scale(
+#         arr[i], (block*2, block*2)), (block*3, block*5))
 
 
 def dis(arr, i):
     screen.fill(white)
+    # screen.fill(black)
     draw_grid()
-    # screen.blit(pygame.transform.scale(
-    #     body, (block*3, block*3)), (block*5-block/2, block*5-block/2))
-    screen.blit(pygame.transform.scale(
-        arr[0], (block, block)), (block*3 + block*i, block*5))
-    # screen.blit(pygame.transform.scale(
-    #     arr[i], (block, block)), (block*5, block*5))
+    # pygame.draw.rect(screen, white, pygame.Rect(0, 0, cs, cs))
+    img = arr[i]
+    img = pygame.transform.scale(arr[i], (block*3 + block*0.6, block*4))
+    screen.blit(img, (block*2, block*2))
+    # pygame.draw.rect(screen, blue, pygame.Rect(0, cs/2-1, cs*4, 2))
+    # pygame.draw.rect(screen, blue, pygame.Rect(0, cs*0.75, cs*4, 2))
+    # pygame.draw.rect(screen, blue, pygame.Rect(cs/2-1, 0, 2, cs*4))
+    # pygame.draw.rect(screen, blue, pygame.Rect(cs*0.25, 0, 2, cs*4))
 
-    # screen.blit(pygame.transform.scale(
-    # arr[i], (409.6/9, 409.6/9)), ((i)*409.6/9, 0))
+
 count = 0
 game_over = False
 while not game_over:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
-    # dis(arr, count)
+    dis(arr, count)
     count += 1
     if count >= len(arr):
         count = 0
